@@ -14,7 +14,7 @@ module.exports = function(grunt) {
         express: {
             all: {
                 options: {
-                    bases: [process.cwd() + '/output/'],
+                    bases: [process.cwd() + '/src/'],
                     port: 8080,
                     hostname: "0.0.0.0",
                     livereload: true
@@ -26,57 +26,29 @@ module.exports = function(grunt) {
         // https://github.com/gruntjs/grunt-contrib-watch
         includes: {
             files: {
-                src: ['src/*.html'], // Source files
-                dest: 'src/base', // Destination directory
-                flatten: true,
-                cwd: '.',
+                cwd: 'src/site',
+                src: ['*.html', 'pages/*.html'], // Source files
+                dest: 'src', // Destination directory
                 options: {
+                    includePath: 'src/partials',
+                    flatten: true,
                     silent: true,
                     banner: ''
                 }
             }
         },
-//        concat: {
-//            options: {
-//                banner: '<%= banner %>',
-//                stripBanners: true
-//            },
-//            css: {
-//                src: 'src/css/**/*.css',
-//                dest: 'temp/combined.css'
-//            },
-//            js: {
-//                src: 'src/js/**/*.js',
-//                dest: 'temp/combined.js'
-//            }
-//        },
-//        cssmin: {
-//          css: {
-//              src: 'temp/combined.css',
-//              dest: 'output/css/styles.css'
-//          }
-//        },
-//        uglify: {
-//            options: {
-//                banner: '<%= banner %>'
-//            },
-//            js: {
-//                src: 'temp/combined.js',
-//                dest: 'output/js/js.min.js'
-//            }
-//        },
         useminPrepare: {
-            html: 'src/base/index.html',
+            html: 'src/index.html',
             options: {
                 dest: 'output'
             }
         },
-        usemin:{
-            html:['output/index.html']
+        usemin: {
+            html: ['output/index.html']
         },
-        copy:{
+        copy: {
             html: {
-                src: 'src/base/index.html', dest: 'output/index.html'
+                src: 'src/index.html', dest: 'output/index.html'
             }
         },
         jshint: {
@@ -111,27 +83,21 @@ module.exports = function(grunt) {
             files: ['test/**/*.html']
         },
         watch: {
-            gruntfile: {
-                files: '<%= jshint.gruntfile.src %>',
-                tasks: ['jshint:gruntfile']
-            },
-            // lib_test: {
-            //   files: '<%= jshint.lib_test.src %>',
-            //   tasks: ['jshint:lib_test', 'qunit']
-            // },
             js: {
                 files: 'src/js/**/*.js',
                 tasks: ['jshint']
             },
             html: {
-                files: 'src/**/*.html',
+                files: 'src/site/**/*.html',
                 tasks: ['includes']
             },
             styles: {
                 files: 'src/css/**/*.css'
             },
             all: {
-                files: 'output/**/*',
+                files: [
+                    'src/**/*'
+                ],
                 options: {
                     livereload: true
                 }
@@ -145,7 +111,7 @@ module.exports = function(grunt) {
                     src: [
                         '.tmp',
                         'output',
-                        'src/base'
+                        'src/index.html'
                     ]
                 }]
             }
@@ -165,9 +131,6 @@ module.exports = function(grunt) {
     grunt.registerTask('default', [
         'includes',
         'express',
-        'concat',
-        'cssmin',
-        'uglify',
         'open',
         'watch'
     ]);
