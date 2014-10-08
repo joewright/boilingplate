@@ -39,18 +39,28 @@ module.exports = function(grunt) {
                 banner: '<%= banner %>',
                 stripBanners: true
             },
-            dist: {
-                src: ['src/scripts/**/*.js'],
-                dest: 'dist/scripts.js'
+            css: {
+                src: 'src/css/**/*.css',
+                dest: 'dist/combined.css'
+            },
+            js: {
+                src: 'src/js/**/*.js',
+                dest: 'dist/combined.js'
             }
+        },
+        cssmin: {
+          css: {
+              src: 'dist/combined.css',
+              dest: 'output/css/styles.css'
+          }
         },
         uglify: {
             options: {
                 banner: '<%= banner %>'
             },
-            dist: {
-                src: 'src/scripts/main.js',
-                dest: 'output/scripts/scripts.min.js'
+            js: {
+                src: 'dist/combined.js',
+                dest: 'output/js/js.min.js'
             }
         },
         jshint: {
@@ -71,7 +81,7 @@ module.exports = function(grunt) {
             },
 //            all: {
 //                src: [
-//                    'output/scripts/**/*.js'
+//                    'output/js/**/*.js'
 //                ]
 //            },
             gruntfile: {
@@ -94,7 +104,7 @@ module.exports = function(grunt) {
             //   tasks: ['jshint:lib_test', 'qunit']
             // },
             js: {
-                files: 'src/scripts/**/*.js',
+                files: 'src/js/**/*.js',
                 tasks: ['jshint']
             },
             html: {
@@ -102,7 +112,7 @@ module.exports = function(grunt) {
                 tasks: ['includes']
             },
             styles: {
-                files: 'src/styles/**/*.css'
+                files: 'src/css/**/*.css'
             },
             all: {
                 files: 'output/**/*',
@@ -121,7 +131,8 @@ module.exports = function(grunt) {
     });
 
     // These plugins provide necessary tasks.
-//    grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-qunit');
     grunt.loadNpmTasks('grunt-contrib-jshint');
@@ -134,7 +145,8 @@ module.exports = function(grunt) {
     grunt.registerTask('default', [
         'includes',
         'express',
-//        'concat',
+        'concat',
+        'cssmin',
         'uglify',
         'open',
         'watch'
