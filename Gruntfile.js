@@ -1,8 +1,10 @@
 /*global module:false*/
 module.exports = function(grunt) {
     // Load grunt tasks automatically
+    require('load-grunt-tasks')(grunt);
+
     // Project configuration.
-    grunt.initConfig({
+    grunt.config.init({
         // Metadata.
         pkg: grunt.file.readJSON('package.json'),
         banner: '',
@@ -12,7 +14,7 @@ module.exports = function(grunt) {
         express: {
             all: {
                 options: {
-                    bases: [process.cwd() + '/output/'],
+                    bases: [process.cwd() + '/src/'],
                     port: 8080,
                     hostname: "0.0.0.0",
                     livereload: true
@@ -24,33 +26,29 @@ module.exports = function(grunt) {
         // https://github.com/gruntjs/grunt-contrib-watch
         includes: {
             files: {
-                src: ['src/*.html'], // Source files
-                dest: 'output', // Destination directory
-                flatten: true,
-                cwd: '.',
+                cwd: 'src/site',
+                src: ['*.html', 'pages/*.html'], // Source files
+                dest: 'src', // Destination directory
                 options: {
+                    includePath: 'src/partials',
+                    flatten: true,
                     silent: true,
                     banner: ''
                 }
             }
         },
-        concat: {
+        useminPrepare: {
+            html: 'src/index.html',
             options: {
-                banner: '<%= banner %>',
-                stripBanners: true
-            },
-            dist: {
-                src: ['src/scripts/**/*.js'],
-                dest: 'dist/scripts.js'
+                dest: 'output'
             }
         },
-        uglify: {
-            options: {
-                banner: '<%= banner %>'
-            },
-            dist: {
-                src: 'src/scripts/main.js',
-                dest: 'output/scripts/scripts.min.js'
+        usemin: {
+            html: ['output/index.html']
+        },
+        copy: {
+            html: {
+                src: 'src/index.html', dest: 'output/index.html'
             }
         },
         jshint: {
@@ -71,7 +69,7 @@ module.exports = function(grunt) {
             },
 //            all: {
 //                src: [
-//                    'output/scripts/**/*.js'
+//                    'output/js/**/*.js'
 //                ]
 //            },
             gruntfile: {
@@ -85,30 +83,37 @@ module.exports = function(grunt) {
             files: ['test/**/*.html']
         },
         watch: {
-            gruntfile: {
-                files: '<%= jshint.gruntfile.src %>',
-                tasks: ['jshint:gruntfile']
-            },
-            // lib_test: {
-            //   files: '<%= jshint.lib_test.src %>',
-            //   tasks: ['jshint:lib_test', 'qunit']
-            // },
             js: {
-                files: 'src/scripts/**/*.js',
+                files: 'src/js/**/*.js',
                 tasks: ['jshint']
             },
             html: {
-                files: 'src/**/*.html',
+                files: 'src/site/**/*.html',
                 tasks: ['includes']
             },
             styles: {
-                files: 'src/styles/**/*.css'
+                files: 'src/css/**/*.css'
             },
             all: {
-                files: 'output/**/*',
+                files: [
+                    'src/**/*'
+                ],
                 options: {
                     livereload: true
                 }
+            }
+        },
+        // Empties folders to start fresh
+        clean: {
+            dist: {
+                files: [{
+                    dot: true,
+                    src: [
+                        '.tmp',
+                        'output',
+                        'src/index.html'
+                    ]
+                }]
             }
         },
         // grunt-open will open your browser at the project's URL
@@ -120,24 +125,22 @@ module.exports = function(grunt) {
         }
     });
 
-    // These plugins provide necessary tasks.
-//    grunt.loadNpmTasks('grunt-contrib-concat');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-contrib-qunit');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-includes');
-    grunt.loadNpmTasks('grunt-open');
-    grunt.loadNpmTasks('grunt-express');
+
     // Default task.
     grunt.registerTask('test', ['jshint', 'qunit']);
     grunt.registerTask('default', [
         'includes',
         'express',
-//        'concat',
-        'uglify',
         'open',
         'watch'
     ]);
-
+    grunt.registerTask('build', [
+        'includes',
+        'copy:html',
+        'useminPrepare',
+        'concat',
+        'cssmin',
+        'uglify',
+        'usemin'
+    ]);
 };
