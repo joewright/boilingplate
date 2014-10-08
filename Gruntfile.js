@@ -41,16 +41,16 @@ module.exports = function(grunt) {
             },
             css: {
                 src: 'src/css/**/*.css',
-                dest: 'dist/combined.css'
+                dest: 'temp/combined.css'
             },
             js: {
                 src: 'src/js/**/*.js',
-                dest: 'dist/combined.js'
+                dest: 'temp/combined.js'
             }
         },
         cssmin: {
           css: {
-              src: 'dist/combined.css',
+              src: 'temp/combined.css',
               dest: 'output/css/styles.css'
           }
         },
@@ -59,7 +59,7 @@ module.exports = function(grunt) {
                 banner: '<%= banner %>'
             },
             js: {
-                src: 'dist/combined.js',
+                src: 'temp/combined.js',
                 dest: 'output/js/js.min.js'
             }
         },
