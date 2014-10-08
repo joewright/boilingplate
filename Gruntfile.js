@@ -27,7 +27,7 @@ module.exports = function(grunt) {
         includes: {
             files: {
                 src: ['src/*.html'], // Source files
-                dest: 'output', // Destination directory
+                dest: 'src/base', // Destination directory
                 flatten: true,
                 cwd: '.',
                 options: {
@@ -36,33 +36,47 @@ module.exports = function(grunt) {
                 }
             }
         },
-        concat: {
+//        concat: {
+//            options: {
+//                banner: '<%= banner %>',
+//                stripBanners: true
+//            },
+//            css: {
+//                src: 'src/css/**/*.css',
+//                dest: 'temp/combined.css'
+//            },
+//            js: {
+//                src: 'src/js/**/*.js',
+//                dest: 'temp/combined.js'
+//            }
+//        },
+//        cssmin: {
+//          css: {
+//              src: 'temp/combined.css',
+//              dest: 'output/css/styles.css'
+//          }
+//        },
+//        uglify: {
+//            options: {
+//                banner: '<%= banner %>'
+//            },
+//            js: {
+//                src: 'temp/combined.js',
+//                dest: 'output/js/js.min.js'
+//            }
+//        },
+        useminPrepare: {
+            html: 'src/base/index.html',
             options: {
-                banner: '<%= banner %>',
-                stripBanners: true
-            },
-            css: {
-                src: 'src/css/**/*.css',
-                dest: 'temp/combined.css'
-            },
-            js: {
-                src: 'src/js/**/*.js',
-                dest: 'temp/combined.js'
+                dest: 'output'
             }
         },
-        cssmin: {
-          css: {
-              src: 'temp/combined.css',
-              dest: 'output/css/styles.css'
-          }
+        usemin:{
+            html:['output/index.html']
         },
-        uglify: {
-            options: {
-                banner: '<%= banner %>'
-            },
-            js: {
-                src: 'temp/combined.js',
-                dest: 'output/js/js.min.js'
+        copy:{
+            html: {
+                src: 'src/base/index.html', dest: 'output/index.html'
             }
         },
         jshint: {
@@ -123,6 +137,19 @@ module.exports = function(grunt) {
                 }
             }
         },
+        // Empties folders to start fresh
+        clean: {
+            dist: {
+                files: [{
+                    dot: true,
+                    src: [
+                        '.tmp',
+                        'output',
+                        'src/base'
+                    ]
+                }]
+            }
+        },
         // grunt-open will open your browser at the project's URL
         // https://www.npmjs.org/package/grunt-open
         open: {
@@ -144,5 +171,13 @@ module.exports = function(grunt) {
         'open',
         'watch'
     ]);
-
+    grunt.registerTask('build', [
+        'includes',
+        'copy:html',
+        'useminPrepare',
+        'concat',
+        'cssmin',
+        'uglify',
+        'usemin'
+    ]);
 };
