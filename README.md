@@ -5,20 +5,21 @@
 
 
 ###First run
-
+Install dependencies
 ```
 npm install
 ```
 
 ###Develop
-
+Run the local server, open your web browser
 ```
 grunt
 ```
-Runs the server, copies js/css/html to output/ and reloads web browser on file changes.
+Grunt copies js/css/html to output/ and reloads web browser on file changes.
 
 ###Distribute
+Minify and concatenate js/css/html
 ```
 grunt build
 ```
-Minify and concatenate js/css/html, resulting files are sent to output/ directory.
+Resulting files are sent to output/ directory.
