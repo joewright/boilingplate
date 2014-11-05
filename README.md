@@ -10,8 +10,15 @@
 npm i
 ```
 
-###Start server
+###Develop
 
 ```
 grunt
 ```
+Runs the server, copies js/css/html to output/ and reloads web browser on file changes.
+
+###Distribute
+```
+grunt build
+```
+Minify and concatenate js/css/html, resulting files are sent to output/ directory.
