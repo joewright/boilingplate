@@ -1,7 +1,7 @@
 #Requirements
 
-* node 0.10.x
-* grunt-cli
+* [node 0.10.+](http://nodejs.org/)
+* [grunt-cli](https://github.com/gruntjs/grunt-cli)
 
 
 ###First run
