@@ -32,8 +32,10 @@ File structure looks like this
 |   |       |-- lib.js
 |   |-- css
 |   |       |-- style.css
+|-- output
+...
 ```
-
+You make changes in src, files are copied to and served from output/.
 
 ###Distribute
 Minify and concatenate js/css/html
