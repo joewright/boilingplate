@@ -7,7 +7,7 @@
 ###First run
 
 ```
-npm i
+npm install
 ```
 
 ###Develop
