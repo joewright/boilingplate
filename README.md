@@ -1,5 +1,5 @@
 Minimal grunt setup that provides
-* templated HTML
+* templated HTML using [grunt-includes](https://github.com/vanetix/grunt-includes)
 * auto reloading of css/js/html
 * jshint
 
