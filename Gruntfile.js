@@ -14,7 +14,7 @@ module.exports = function(grunt) {
         express: {
             all: {
                 options: {
-                    bases: [process.cwd() + '/src/'],
+                    bases: [process.cwd() + '/output/'],
                     port: 8080,
                     hostname: "0.0.0.0",
                     livereload: true
@@ -27,8 +27,8 @@ module.exports = function(grunt) {
         includes: {
             files: {
                 cwd: 'src/site',
-                src: ['*.html', 'pages/*.html'], // Source files
-                dest: 'src', // Destination directory
+                src: ['*.html', '**/*.html'], // Source files
+                dest: 'output', // Destination directory
                 options: {
                     includePath: 'src/partials',
                     flatten: true,
@@ -38,7 +38,7 @@ module.exports = function(grunt) {
             }
         },
         useminPrepare: {
-            html: 'src/index.html',
+            html: 'output/index.html',
             options: {
                 dest: 'output'
             }
@@ -48,35 +48,27 @@ module.exports = function(grunt) {
         },
         copy: {
             html: {
-                src: 'src/index.html', dest: 'output/index.html'
+                src: 'src/index.html',
+                dest: 'output/index.html'
+            },
+            js: {
+                expand: true,
+                cwd: 'src/',
+                src: '**/*.js',
+                dest: 'output/'
+            },
+            css: {
+                expand: true,
+                cwd: 'src/',
+                src: '**/*.css',
+                dest: 'output/'
             }
         },
         jshint: {
-            options: {
-                curly: true,
-                eqeqeq: true,
-                immed: true,
-                latedef: true,
-                newcap: true,
-                noarg: true,
-                sub: true,
-                undef: true,
-                unused: true,
-                boss: true,
-                eqnull: true,
-                browser: true,
-                globals: {}
-            },
-//            all: {
-//                src: [
-//                    'output/js/**/*.js'
-//                ]
-//            },
-            gruntfile: {
-                src: 'Gruntfile.js'
-            },
-            lib_test: {
-                src: ['lib/**/*.js', 'test/**/*.js']
+            all: {
+                src: [
+                    'src/**/*.js'
+                ]
             }
         },
         qunit: {
@@ -84,15 +76,16 @@ module.exports = function(grunt) {
         },
         watch: {
             js: {
-                files: 'src/js/**/*.js',
-                tasks: ['jshint']
+                files: 'src/**/*.js',
+                tasks: ['jshint', 'copy:js']
             },
             html: {
-                files: 'src/site/**/*.html',
-                tasks: ['includes']
+                files: 'src/**/*.html',
+                tasks: ['includes', 'copy:html']
             },
             styles: {
-                files: 'src/css/**/*.css'
+                files: 'src/**/*.css',
+                tasks: ['copy:css']
             },
             all: {
                 files: [
@@ -129,12 +122,17 @@ module.exports = function(grunt) {
     // Default task.
     grunt.registerTask('test', ['jshint', 'qunit']);
     grunt.registerTask('default', [
+        'clean',
         'includes',
+        'copy:html',
+        'copy:js',
+        'copy:css',
         'express',
         'open',
         'watch'
     ]);
     grunt.registerTask('build', [
+        'clean',
         'includes',
         'copy:html',
         'useminPrepare',

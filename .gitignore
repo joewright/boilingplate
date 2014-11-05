@@ -1,6 +1,4 @@
 node_modules
 *.DS_Store
 output
-tmp
-src/index.html
-src/base/**/*.html
+.tmp
