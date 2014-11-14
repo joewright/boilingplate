@@ -93,6 +93,10 @@ module.exports = function(grunt) {
                 files: 'src/**/*.css',
                 tasks: ['copy:css']
             },
+            img: {
+                files: 'src/img/**/*',
+                tasks: ['copy:others']
+            },
             all: {
                 files: [
                     'src/**/*'
