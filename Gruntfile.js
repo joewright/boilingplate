@@ -62,6 +62,12 @@ module.exports = function(grunt) {
                 cwd: 'src/',
                 src: '**/*.css',
                 dest: 'output/'
+            },
+            others: {
+                expand: true,
+                cwd: 'src/',
+                src: ['img/**/*', 'images/**/*'],
+                dest: 'output/'
             }
         },
         jshint: {
